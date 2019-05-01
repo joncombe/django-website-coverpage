@@ -12,10 +12,21 @@ def CoverPageMiddleware(get_response):
 
         # do redirect if applicable
         if active and \
+           cookiename not in request.COOKIES and \
            request.method == 'GET' and \
-           request.path != url and \
-           cookiename not in request.COOKIES:
-            return redirect(url)
+           not request.is_ajax() and \
+           request.path != url:
+
+                # check urls to ignore
+                do_redirect = True
+                ignore_urls = config.get('ignore_urls', [])
+                for ig in ignore_urls:
+                    if request.path.startswith(ig):
+                        do_redirect = False
+                        break
+
+                if do_redirect:
+                    return redirect(url)
 
         # return response
         response = get_response(request)

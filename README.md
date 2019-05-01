@@ -35,10 +35,15 @@ Add the following to your settings.py:
 # The following are defaults, change them if you need to,
 # i.e. if you are happy with the defaults, you don't need
 # to add anything to your settings.py
+
 # To disable the coverpage, set active = False
+# To ignore certain URLs, use  'ignore_urls'
+#    e.g. ['/a/', '/b/'] ignores all paths that startswith('/a/') and ('/b/')
+
 WEBSITE_COVERPAGE = {
    'active': True,
    'cookiename': 'coverpage',
+   'ignore_urls': [],
    'template': 'coverpage/coverpage.html',
    'url': '/coverpage/',
 }
