@@ -36,7 +36,9 @@ Add the following to your settings.py:
 # i.e. if you are happy with the defaults, you don't need
 # to add anything to your settings.py
 
-# To disable the coverpage, set active = False
+# To disable the coverpage, either:
+#    - set active = False, or
+#    - comment out the middleware
 # To ignore certain URLs, use  'ignore_urls'
 #    e.g. ['/a/', '/b/'] ignores all paths that startswith('/a/') and ('/b/')
 
@@ -65,8 +67,9 @@ path('coverpage/', CoverPageView.as_view()),
 Is testing a pain because you need to keep clearing your cookies? Incognito mode is your friend.
 
 ### To-do:
-- Make the cookie attributes (e.g. expiry) configurable. Today the cookie expires on browser close.
 - Remember the URL the user originally went to, and redirect there after leaving the coverpage
-- Add start and end datetimes that the coverpage should be active.
+- ~~Add start and end datetimes that the coverpage should be active.~~
+- ~~Allow bots, i.e. Googlebot, through to the content~~
+- Make the cookie attributes (e.g. expiry) configurable. Today the cookie expires on browser close.
 
 Note: I'll do the above when I need them but anyone is welcome to submit their PRs for the above or other suggestions.
