@@ -18,7 +18,11 @@ class CoverPageView(TemplateView):
             cookiename = config.get('cookiename', 'coverpage')
 
             # set cookie and redirect
-            response = redirect(form.cleaned_data['redirect'])
+            r = form.cleaned_data['redirect']
+            if len(r) == 0:
+                r = request.COOKIES['%s_referrer' % cookiename]
+            response = redirect(r)
+            response.delete_cookie('%s_referrer' % cookiename)
             response.set_cookie(cookiename, 1)
             return response
 

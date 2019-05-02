@@ -69,7 +69,12 @@ def CoverPageMiddleware(get_response):
                             do_redirect = False
 
                 if do_redirect:
-                    return redirect(url)
+                    response = redirect(url)
+                    response.set_cookie(
+                        '%s_referrer' % cookiename,
+                        request.path
+                    )
+                    return response
 
         # nothing to do
         response = get_response(request)

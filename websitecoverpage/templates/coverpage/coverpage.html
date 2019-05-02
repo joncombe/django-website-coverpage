@@ -11,7 +11,7 @@
 
     <form method="post">
         {% csrf_token %}
-        <input type="hidden" name="redirect" value="/" />
+        <!-- <input type="hidden" name="redirect" value="/path/of/next/page" /> optional, if you set this the referrer cookie will be ignored -->
         <button>Enter Site</button>
     </form>
 </body>

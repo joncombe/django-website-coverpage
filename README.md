@@ -67,7 +67,7 @@ path('coverpage/', CoverPageView.as_view()),
 Is testing a pain because you need to keep clearing your cookies? Incognito mode is your friend.
 
 ### To-do:
-- Remember the URL the user originally went to, and redirect there after leaving the coverpage
+- ~~Remember the URL the user originally went to, and redirect there after leaving the coverpage~~
 - ~~Add start and end datetimes that the coverpage should be active.~~
 - ~~Allow bots, i.e. Googlebot, through to the content~~
 - Make the cookie attributes (e.g. expiry) configurable. Today the cookie expires on browser close.
