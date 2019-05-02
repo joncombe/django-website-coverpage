@@ -4,7 +4,7 @@ from setuptools import find_packages
 
 setup(
     name='django-website-coverpage',
-    version='0.0.3',
+    version='0.0.4',
     author=u'Jon Combe',
     author_email='pypi@joncombe.net',
     packages=find_packages(),

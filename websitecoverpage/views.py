@@ -20,7 +20,7 @@ class CoverPageView(TemplateView):
             # set cookie and redirect
             r = form.cleaned_data['redirect']
             if len(r) == 0:
-                r = request.COOKIES['%s_referrer' % cookiename]
+                r = request.COOKIES.get('%s_referrer' % cookiename, '/')
             response = redirect(r)
             response.delete_cookie('%s_referrer' % cookiename)
             response.set_cookie(cookiename, 1)
