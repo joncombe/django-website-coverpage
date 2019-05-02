@@ -51,6 +51,19 @@ WEBSITE_COVERPAGE = {
 }
 ```
 
+Set start and end dates, as follows. If your website uses a timezone, it will respect that:
+```
+WEBSITE_COVERPAGE = {
+   'active': True,
+   'cookiename': 'coverpage',
+   'ignore_urls': [],
+   'start': [2019, 5, 1, 0, 0, 0],
+   'end': [2019, 6, 1, 0, 0, 0],
+   'template': 'coverpage/coverpage.html',
+   'url': '/coverpage/',
+}
+```
+
 In your urls.py:
 ```
 from websitecoverpage.views import CoverPageView
