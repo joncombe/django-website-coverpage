@@ -7,7 +7,7 @@ Here in Thailand, it is customary for websites to show a cover page to celebrate
 
 - A middleware detects if a 'coverpage' cookie exists:
     - if it exists, nothing happens
-    - if it doesn't exist, you are redirected to the URL of the coverpage
+    - if it doesn't exist - and the visitor is not a common bot - they are redirected to the URL of the coverpage
 
 - A view:
     - shows the coverpage
@@ -39,7 +39,7 @@ Add the following to your settings.py:
 # To disable the coverpage, either:
 #    - set active = False, or
 #    - comment out the middleware
-# To ignore certain URLs, use  'ignore_urls'
+# To ignore certain URLs, add values to the 'ignore_urls' list:
 #    e.g. ['/a/', '/b/'] ignores all paths that startswith('/a/') and ('/b/')
 
 WEBSITE_COVERPAGE = {
@@ -51,7 +51,7 @@ WEBSITE_COVERPAGE = {
 }
 ```
 
-Set start and end dates, as follows. If your website uses a timezone, it will respect that:
+Set `start` and `end` dates as follows. If your website uses a timezone, it will respect that:
 ```
 WEBSITE_COVERPAGE = {
    'active': True,

@@ -34,15 +34,35 @@ def CoverPageMiddleware(get_response):
                 if do_redirect:
                     ua = request.META.get('HTTP_USER_AGENT', '').lower()
                     bots = [
+                        '360spider',
+                        'adsbot-google',
+                        'ahrefs',
+                        'archive.org',
                         'baiduspider',
                         'bingbot',
+                        'bingpreview',
+                        'dotbot',
+                        'duckduckgo',
                         'duckduckbot',
                         'exabot',
                         'facebook',
+                        'feedfetcher-google',
                         'googlebot',
+                        'googleimageproxy',
                         'ia_archiver',
+                        'mediapartners-google',
+                        'mj12bot',
+                        'msnbot',
+                        'panscient.com',
+                        'pinterest',
+                        'slackbot',
                         'slurp',
                         'sogou',
+                        'surveybot',
+                        'twitterbot',
+                        'voilabot',
+                        'yahoo-mmcrawler',
+                        'yahoomailproxy',
                         'yandexbot'
                     ]
                     for bot in bots:
