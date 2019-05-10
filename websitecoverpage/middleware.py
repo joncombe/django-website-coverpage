@@ -22,12 +22,23 @@ def CoverPageMiddleware(get_response):
            request.path != url:
                 do_redirect = True
 
-                # check urls to ignore
-                ignore_urls = config.get('ignore_urls', [])
-                for ig in ignore_urls:
+                # check files to ignore
+                ignore_files = config.get('ignore_files', [
+                    '/favicon.ico',
+                    '/robots.txt'
+                ])
+                for ig in ignore_files:
                     if request.path.startswith(ig):
                         do_redirect = False
                         break
+
+                # check urls to ignore
+                if do_redirect:
+                    ignore_urls = config.get('ignore_urls', [])
+                    for ig in ignore_urls:
+                        if request.path.startswith(ig):
+                            do_redirect = False
+                            break
 
                 # ignore common bots
                 # yes, we should use something like

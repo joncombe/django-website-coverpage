@@ -83,6 +83,7 @@ Is testing a pain because you need to keep clearing your cookies? Incognito mode
 - ~~Remember the URL the user originally went to, and redirect there after leaving the coverpage~~
 - ~~Add start and end datetimes that the coverpage should be active.~~
 - ~~Allow bots, i.e. Googlebot, through to the content~~
+- Document the new `ignore_files` setting (please see the source code for now: middleware.py #25-33)
 - Make the cookie attributes (e.g. expiry) configurable. Today the cookie expires on browser close.
 
 Note: I'll do the above when I need them but anyone is welcome to submit their PRs for the above or other suggestions.
