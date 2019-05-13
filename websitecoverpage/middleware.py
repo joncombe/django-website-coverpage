@@ -45,6 +45,8 @@ def CoverPageMiddleware(get_response):
                 if do_redirect:
                     ua = request.META.get('HTTP_USER_AGENT', '').lower()
                     bots = [
+                        'apachebench', # not a bot, but it can go here
+
                         '360spider',
                         'adsbot-google',
                         'ahrefs',
