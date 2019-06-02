@@ -3,9 +3,15 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView
 
 from .forms import CoverPageViewForm
+from .lib import coverpage_is_available
 
 
 class CoverPageView(TemplateView):
+    def dispatch(self, request, *args, **kwargs):
+        if not coverpage_is_available(request):
+            return redirect('/')
+        return super().dispatch(request, *args, **kwargs)
+
     def get_template_names(self):
         config = getattr(settings, 'WEBSITE_COVERPAGE', {})
         return [config.get('template', 'coverpage/coverpage.html')]
