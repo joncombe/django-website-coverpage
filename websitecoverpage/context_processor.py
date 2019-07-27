@@ -1,41 +1,27 @@
-import datetime
-import pytz
-
 from django.conf import settings
-from django.utils.timezone import now
 
+def websitecoverpage(request):
+    # bail if not a non-Ajax GET request
+    if request.method != 'GET' or request.is_ajax():
+        return {}
 
-def get_coverpage_conf():
+    # get config
     config = getattr(settings, 'WEBSITE_COVERPAGE', {})
-    return (
-        config,
-        config.get('active', True),
-        config.get('url', '/coverpage/'),
-        config.get('cookiename', 'coverpage')
-    )
 
-def coverpage_is_available(request):
-    config, active, url, cookiename = get_coverpage_conf()
+    # bail if cookie already set
+    cookie_name = config.get('cookie_name', 'coverpage')
+    if cookie_name in request.COOKIES:
+        print('coverpage cookie exists')
+        return {}
 
-    # bail out if obviously not active
-    if not active:
-        return False
-
-    # check files to ignore
-    ignore_files = config.get('ignore_files', [
+    # get ignore_urls
+    ignore_urls = config.get('ignore_urls', '[]') + [
         '/favicon.ico',
         '/robots.txt'
-    ])
-    for ig in ignore_files:
-        if request.path.startswith(ig):
-            return False
-
-    # check urls to ignore
-    ignore_urls = config.get('ignore_urls', [])
+    ]
     for ig in ignore_urls:
         if request.path.startswith(ig):
-            return False
-
+            return {}
 
     # ignore common bots
     ua = request.META.get('HTTP_USER_AGENT', '').lower()
@@ -74,8 +60,17 @@ def coverpage_is_available(request):
     ]
     for bot in bots:
         if bot in ua:
-            return False
+            return {}
 
+    # attempt to find from memcache
+    #
+    #
+
+    # attempt to find from database
+    #
+    #
+
+    """
     # check start time
     dt_from = config.get('start', None)
     if dt_from is not None:
@@ -91,6 +86,54 @@ def coverpage_is_available(request):
         dt_to = datetime.datetime(*dt_to, tzinfo=tz)
         if now() > dt_to:
             return False
+    """
 
-    # coverpage is available to be viewed
-    return True
+    # temporary values
+    html = """
+<table onclick="websiteCoverPage.close()">
+    <tr>
+        <td>
+            <img src="/static/coverpage/2/king_birthday.jpg" />
+        </td>
+    </tr>
+</table>
+    """
+
+    style = """
+#websitecoverpage {
+    background: rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 9999998;
+}
+
+#websitecoverpage table, tr {
+    height: 100vh;
+    width: 100%;
+}
+
+#websitecoverpage td {
+    padding: 25px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#websitecoverpage img {
+    box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    max-width: 800px;
+    width: 100%;
+}
+    """
+
+    # coverpage found: return it
+    return {
+        'websitecoverpage': {
+            'cookie_name': cookie_name,
+            'html': html,
+            'style': style
+        }
+    }
