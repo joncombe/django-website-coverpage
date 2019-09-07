@@ -8,18 +8,18 @@ from websitecoverpage.models import WebsiteCoverPage
 
 
 def websitecoverpage(request):
-    # bail if not a non-Ajax GET request
-    if request.method != 'GET' or request.is_ajax():
-        return {}
-
-    # get config
     config = getattr(settings, 'WEBSITE_COVERPAGE', {})
 
     # bail if cookie already set, i.e. if the user has already
     # seen the coverpage we don't want to show it again
     cookie_name = config.get('cookie_name', 'coverpage')
     if cookie_name in request.COOKIES:
-        print('coverpage cookie exists')
+        # coverpage cookie exists: the user has already
+        # seen the coverpage so no need to display it again
+        return {}
+
+    # bail if not a non-Ajax GET request
+    if request.method != 'GET' or request.is_ajax():
         return {}
 
     # get ignore_urls
