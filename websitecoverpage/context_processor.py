@@ -1,4 +1,8 @@
 from django.conf import settings
+from django.utils import timezone
+
+from websitecoverpage.models import WebsiteCoverPage
+
 
 def websitecoverpage(request):
     # bail if not a non-Ajax GET request
@@ -8,7 +12,8 @@ def websitecoverpage(request):
     # get config
     config = getattr(settings, 'WEBSITE_COVERPAGE', {})
 
-    # bail if cookie already set
+    # bail if cookie already set, i.e. if the user has already
+    # seen the coverpage we don't want to show it again
     cookie_name = config.get('cookie_name', 'coverpage')
     if cookie_name in request.COOKIES:
         print('coverpage cookie exists')
@@ -62,7 +67,12 @@ def websitecoverpage(request):
         if bot in ua:
             return {}
 
-    # attempt to find from memcache
+    print(timezone.localtime())
+
+    # attempt to find from cache
+    cache_key = config.get('cache_key', 'website-coverpage')
+    print(cache_key)
+    print(WebsiteCoverPage)
     #
     #
 
@@ -101,31 +111,31 @@ def websitecoverpage(request):
 
     style = """
 #websitecoverpage {
-    background: rgba(0, 0, 0, 0.5);
-    height: 100vh;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-    z-index: 9999998;
+  background: rgba(0, 0, 0, 0.5);
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 9999998;
 }
 
 #websitecoverpage table, tr {
-    height: 100vh;
-    width: 100%;
+  height: 100vh;
+  width: 100%;
 }
 
 #websitecoverpage td {
-    padding: 25px;
-    text-align: center;
-    vertical-align: middle;
+  padding: 25px;
+  text-align: center;
+  vertical-align: middle;
 }
 
 #websitecoverpage img {
-    box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.5);
-    cursor: pointer;
-    max-width: 800px;
-    width: 100%;
+  box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  max-width: 800px;
+  width: 100%;
 }
     """
 
