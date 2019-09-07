@@ -1,3 +1,5 @@
+from django.conf import settings
+from django.core.cache import cache
 from django.db import models
 
 
@@ -46,3 +48,25 @@ class WebsiteCoverPage(models.Model):
 
     def __str__(self):
         return self.name
+
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+        self.remove_cache()
+
+    def save(self, *args, **kwargs):
+        # force start to be before end
+        if self.start_datetime > self.end_datetime:
+            tmp = self.start_datetime
+            self.start_datetime = self.end_datetime
+            self.end_datetime = tmp
+
+        super().save(*args, **kwargs)
+        self.remove_cache()
+
+    def remove_cache(self):
+        config = getattr(settings, 'WEBSITE_COVERPAGE', {})
+        cache_key = config.get('cache_key', 'website-coverpage')
+        cache.delete(cache_key)
+
+    class Meta:
+        ordering = ('start_datetime', 'end_datetime', 'name')

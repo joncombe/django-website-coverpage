@@ -1,4 +1,4 @@
-<style>{{ websitecoverpage.style|safe }}</style>
+<style>{% spaceless %}{{ websitecoverpage.style|safe }}{% endspaceless %}</style>
 <div id="websitecoverpage">{{ websitecoverpage.html|safe }}</div>
 <script>
 var websiteCoverPage = {

@@ -1,4 +1,7 @@
+import math
+
 from django.conf import settings
+from django.core.cache import cache
 from django.utils import timezone
 
 from websitecoverpage.models import WebsiteCoverPage
@@ -67,83 +70,42 @@ def websitecoverpage(request):
         if bot in ua:
             return {}
 
-    print(timezone.localtime())
-
     # attempt to find from cache
     cache_key = config.get('cache_key', 'website-coverpage')
-    print(cache_key)
-    print(WebsiteCoverPage)
-    #
-    #
+    coverpage = cache.get(cache_key, None)
+    if coverpage is None:
+        # find next available page from the database
+        now = timezone.now()
+        page = WebsiteCoverPage.objects \
+                .filter(end_datetime__gt=now) \
+                .order_by('start_datetime', 'end_datetime') \
+                .first()
 
-    # attempt to find from database
-    #
-    #
+        if page is None:
+            # there are no valid pages in the database
+            # set a long, empty cache
+            coverpage = {}
+            cache_timeout = 60 * 60 * 24 * 28
+        else:
+            if page.start_datetime < now:
+                # a coverpage is active
+                # cache the results until it's end_datetime
+                coverpage = {
+                    'websitecoverpage': {
+                        'cookie_name': cookie_name,
+                        'html': page.html,
+                        'style': page.style
+                    }
+                }
+                cache_timeout = (page.end_datetime - now).total_seconds()
+            else:
+                # the next page is in the future
+                # set an empty cache until that time
+                coverpage = {}
+                cache_timeout = (page.start_datetime - now).total_seconds()
 
-    """
-    # check start time
-    dt_from = config.get('start', None)
-    if dt_from is not None:
-        tz = pytz.timezone(settings.TIME_ZONE) if settings.USE_TZ else None
-        dt_from = datetime.datetime(*dt_from, tzinfo=tz)
-        if now() < dt_from:
-            return False
+        # save to cache
+        cache.set(cache_key, coverpage, math.ceil(cache_timeout))
 
-    # check end time
-    dt_to = config.get('end', None)
-    if dt_to is not None:
-        tz = pytz.timezone(settings.TIME_ZONE) if settings.USE_TZ else None
-        dt_to = datetime.datetime(*dt_to, tzinfo=tz)
-        if now() > dt_to:
-            return False
-    """
-
-    # temporary values
-    html = """
-<table onclick="websiteCoverPage.close()">
-    <tr>
-        <td>
-            <img src="/static/coverpage/2/king_birthday.jpg" />
-        </td>
-    </tr>
-</table>
-    """
-
-    style = """
-#websitecoverpage {
-  background: rgba(0, 0, 0, 0.5);
-  height: 100vh;
-  left: 0;
-  position: fixed;
-  right: 0;
-  top: 0;
-  z-index: 9999998;
-}
-
-#websitecoverpage table, tr {
-  height: 100vh;
-  width: 100%;
-}
-
-#websitecoverpage td {
-  padding: 25px;
-  text-align: center;
-  vertical-align: middle;
-}
-
-#websitecoverpage img {
-  box-shadow: 0px 0px 25px 5px rgba(0, 0, 0, 0.5);
-  cursor: pointer;
-  max-width: 800px;
-  width: 100%;
-}
-    """
-
-    # coverpage found: return it
-    return {
-        'websitecoverpage': {
-            'cookie_name': cookie_name,
-            'html': html,
-            'style': style
-        }
-    }
+    # return
+    return coverpage
