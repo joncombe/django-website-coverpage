@@ -69,4 +69,6 @@ class WebsiteCoverPage(models.Model):
         cache.delete(cache_key)
 
     class Meta:
+        verbose_name = 'Cover page'
+        verbose_name_plural = 'Cover pages'
         ordering = ('start_datetime', 'end_datetime', 'name')

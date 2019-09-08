@@ -1,7 +1,9 @@
 django-website-coverpage
 ====
 
-Here in Thailand, it is customary for websites to show a cover page to celebrate national events, for example the King's birthday. This very simple app does just that.
+Here in Thailand, it is customary for websites to show a cover page (an intersitial webpage) to celebrate national events, for example the King's birthday. This very simple app allows you to specify any number of these pages, with start and end dates defined for each one.
+
+There is also a hook included to automatically add this model to the [Wagtail CMS admin](https://wagtail.io/) should you use it. You can still use this app in non-Wagtail projects.
 
 ### How it works:
 
@@ -9,9 +11,9 @@ Here in Thailand, it is customary for websites to show a cover page to celebrate
 
 - When a page is loaded, and a valid coverpage is available (i.e. the time now is between the start and end datetime), the coverpage is displayed.
 
-Note #1: this app uses caching for speed. It is highly recommended you have caching enabled in your project.
+_Note #1: this app uses caching for speed. It is highly recommended you have caching enabled in your project._
 
-Note #2: this app uses a cookie, and not the user's session. This is because the session is refreshed when logging in or out, and showing the coverpage again in this scenario wouldn't make any sense.
+_Note #2: this app uses a cookie, and not the user's session. This is because the session is refreshed when logging in or out, and showing the coverpage again in this scenario wouldn't make any sense._
 
 ### Installation:
 ```
@@ -20,7 +22,11 @@ pip install django-website-coverpage
 
 Add the following to your settings.py INSTALLED_APPS:
 ```
-'websitecoverpage'
+INSTALLED_APPS = [
+    ...
+    'websitecoverpage'
+    ...
+]
 ```
 
 Add the following to your settings.py TEMPLATES > OPTIONS > context_processors:
@@ -28,7 +34,7 @@ Add the following to your settings.py TEMPLATES > OPTIONS > context_processors:
 'websitecoverpage.context_processor.websitecoverpage'
 ```
 
-Add the following to your settings.py:
+Optionally add the following to your settings.py:
 ```
 # The following are defaults, change them if you need to,
 # i.e. if you are happy with the defaults, you don't need
