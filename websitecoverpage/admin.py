@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 from websitecoverpage.models import WebsiteCoverPage
 
@@ -9,15 +10,12 @@ class WebsiteCoverPageAdmin(admin.ModelAdmin):
 
     def date_status(self, obj):
         now = timezone.now()
-
-        if obj.start_datetime > obj.end_datetime:
-            return 'INVALID DATES'
-        elif obj.end_datetime <= now:
-            return 'Past'
+        if obj.end_datetime <= now:
+            return _('Past')
         elif obj.start_datetime > now:
-            return 'Future'
+            return _('Future')
         else:
-            return 'Active'
-    date_status.short_description = 'Status'
+            return _('Active')
+    date_status.short_description = _('Status')
 
 admin.site.register(WebsiteCoverPage, WebsiteCoverPageAdmin)

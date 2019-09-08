@@ -24,7 +24,7 @@ Add the following to your settings.py INSTALLED_APPS:
 ```
 INSTALLED_APPS = [
     ...
-    'websitecoverpage'
+    'websitecoverpage.apps.WebsiteCoverPageConfig'
     ...
 ]
 ```

@@ -1,4 +1,6 @@
 from django.utils import timezone
+from django.utils.translation import gettext as _
+
 from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
 
 from .models import WebsiteCoverPage
@@ -14,15 +16,12 @@ class WebsiteCoverPageAdmin(ModelAdmin):
 
     def date_status(self, obj):
         now = timezone.now()
-
-        if obj.start_datetime > obj.end_datetime:
-            return 'INVALID DATES'
-        elif obj.end_datetime <= now:
-            return 'Past'
+        if obj.end_datetime <= now:
+            return _('Past')
         elif obj.start_datetime > now:
-            return 'Future'
+            return _('Future')
         else:
-            return 'Active'
-    date_status.short_description = 'Status'
+            return _('Active')
+    date_status.short_description = _('Status')
 
 modeladmin_register(WebsiteCoverPageAdmin)

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.cache import cache
 from django.db import models
+from django.utils.translation import gettext as _
 
 
 class WebsiteCoverPage(models.Model):
@@ -40,11 +41,11 @@ class WebsiteCoverPage(models.Model):
   width: 100%;
 }"""
 
-    name = models.CharField(max_length=255)
-    html = models.TextField(blank=True, default=DEFAULT_HTML)
-    style = models.TextField(blank=True, default=DEFAULT_STYLE)
-    start_datetime = models.DateTimeField()
-    end_datetime = models.DateTimeField()
+    name = models.CharField(max_length=255, verbose_name=_('Name'))
+    html = models.TextField(blank=True, default=DEFAULT_HTML, verbose_name=_('HTML'))
+    style = models.TextField(blank=True, default=DEFAULT_STYLE, verbose_name=_('CSS'))
+    start_datetime = models.DateTimeField(verbose_name=_('Start time'))
+    end_datetime = models.DateTimeField(verbose_name=_('End time'))
 
     def __str__(self):
         return self.name
@@ -69,6 +70,6 @@ class WebsiteCoverPage(models.Model):
         cache.delete(cache_key)
 
     class Meta:
-        verbose_name = 'Cover page'
-        verbose_name_plural = 'Cover pages'
+        verbose_name = _('Cover page')
+        verbose_name_plural = _('Cover pages')
         ordering = ('start_datetime', 'end_datetime', 'name')
